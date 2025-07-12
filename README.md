@@ -9,7 +9,7 @@
 ---------------------------- */
     @font-face {
         font-family: 'komadori_mini';
-        src: url('komadori_mini/komadori-mini.otf') format('opentype');
+        src: url('komadori-mini.otf') format('opentype');
     }
 
     :root {
