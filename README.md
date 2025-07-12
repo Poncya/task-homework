@@ -515,10 +515,6 @@
 </style>
 </head>
 
-body {
-  font-family: 'komadori_mini', sans-serif;
-}
-
 <body id ="mode-body">
     <div class="box light-mode" id="mode-box">
         <span class ="h1">本日のタスク</span>
