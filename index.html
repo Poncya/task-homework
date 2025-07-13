@@ -20,14 +20,14 @@
    全体のレイアウト（html / body） - PCデフォルト
 ---------------------------- */
     html {
-        height: 100vh;
+        height: 100vh; /* PCではビューポートの高さに合わせる */
         margin: 0;
         padding: 0;
     }
 
     body {
         width: 100vw;
-        height: 100vh;
+        height: 100vh; /* PCではビューポートの高さに合わせる */
         margin: 0;
         padding: 0;
         display: flex;
@@ -231,7 +231,8 @@
    詳細box (box2) - PCデフォルト
 ---------------------------- */
     .box2 {
-        position: fixed; /* 常に画面に固定 */
+        /* PC版ではこれまで通りの固定表示（スライドイン） */
+        position: fixed;
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%) translateX(100vw); /* 画面右に隠す */
@@ -390,10 +391,10 @@
             padding: 10px;
             gap: 20px;
             justify-content: flex-start;
-            /* box2が下に出てくる分、全体がスクロールできるように変更 */
             height: auto; /* bodyの高さがコンテンツに合わせて伸びるように */
             min-height: 100vh; /* 最小の高さはビューポートと同じ */
             overflow-y: auto; /* 必要に応じて縦スクロールを許可 */
+            align-items: center; /* 左右中央寄せを維持 */
         }
 
         .box {
@@ -460,23 +461,23 @@
 
         /* box2のスマートフォン専用スタイル */
         .box2 {
-            position: relative; /* fixedからrelativeに変更 */
-            top: auto; /* topの指定を解除 */
-            left: auto; /* leftの指定を解除 */
-            transform: none; /* transformの指定を解除 */
-            margin-top: 20px; /* box1との間にスペース */
-            width: 100%; /* 幅を画面いっぱいに */
-            height: auto; /* 高さはコンテンツに合わせて自動調整 */
-            min-height: 80vh; /* 最小の高さ */
-            transition: transform 0.3s ease-out; /* transformでスライド */
-            transform: translateY(100%); /* 初期状態は下に完全に隠す */
-            border-bottom-left-radius: 10px; /* 角丸を維持 */
-            border-bottom-right-radius: 10px; /* 角丸を維持 */
-            box-sizing: border-box; /* paddingを含めてwidth/heightを計算 */
-        }
-
-        .box2.show-mobile { /* スマホ用の表示クラス */
-            transform: translateY(0); /* 通常表示位置にスライド */
+            position: static; /* fixedを削除し、通常のフローに戻す */
+            top: auto; /* 不要 */
+            bottom: auto; /* 不要 */
+            left: auto; /* 不要 */
+            transform: none; /* transformによる移動も不要 */
+            margin-top: 20px; /* box1の下に表示するための間隔 */
+            width: 95%; /* box1と同じ幅か調整 */
+            height: auto; /* 高さはコンテンツに合わせる */
+            min-height: 350px; /* ある程度の高さを確保 */
+            transition: none; /* スクロールはCSSアニメーションでなくJavaScriptで制御するため */
+            border-bottom-left-radius: 10px;
+            border-bottom-right-radius: 10px;
+            box-sizing: border-box;
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1); /* box1と統一 */
+            padding-top: 15px; /* box1と統一 */
+            z-index: auto; /* 不要 */
+            /* show-mobile クラスは不要になる */
         }
         
         /* スマートフォンでのアイコン位置調整 */
@@ -621,6 +622,9 @@
         box2MainTaskDisplay.textContent = 'メインタスクをせんたくしてね';
         box2SubTasksContainer.innerHTML = '';
         selectedMainTask = null; // 初期化
+
+        // スマホ版でbox2を非表示にする初期設定 (スクロールでの表示なので不要になるが、念のため)
+        // box2.style.display = (window.innerWidth <= 600) ? 'none' : 'flex'; 
     };
 
 // ===============================
@@ -660,9 +664,6 @@
         mainContainer.querySelectorAll('.item-box').forEach(box => {
             const taskText = box.querySelector('.item-content').textContent;
             const completed = box.querySelector('.check-button').classList.contains('checked');
-            // サブタスクは選択されたメインタスクにのみ紐づいているので、直接保存しない
-            // createTaskBox関数で渡されるsubTasksは、初回ロード時にのみ使用されることを想定
-            // 実際はselectedMainTaskオブジェクト経由でサブタスクを管理する
             const savedSubTasks = JSON.parse(localStorage.getItem(`subTasks_${taskText}`)) || [];
             allMainTasks.push({
                 task: taskText,
@@ -712,9 +713,9 @@
                 box2MainTaskDisplay.textContent = 'メインタスクをせんたくしてね';
                 box2SubTasksContainer.innerHTML = '';
                 selectedMainTask = null;
-                // box2を閉じる
+                // PC版でbox2が開いていた場合は閉じる
                 box2.classList.remove('show-pc');
-                box2.classList.remove('show-mobile');
+                // スマホ版ではbox2は常に表示されているので、特に操作不要
             }
             // 関連するサブタスクのlocalStorageも削除
             localStorage.removeItem(`subTasks_${taskText}`);
@@ -782,16 +783,13 @@
                 createSubTaskBox(subTaskData.task, subTaskData.completed, box2SubTasksContainer, selectedMainTask);
             });
 
-            // box2を表示
+            // box2を表示またはスクロール
             if (window.innerWidth > 600) { // PC画面の場合 (600pxより大きい場合)
                 box2.classList.add('show-pc');
             } else { // スマートフォン画面の場合 (600px以下の場合)
-                box2.classList.add('show-mobile');
-                // スマホの場合、box2が表示されたらその位置までスクロール
-                // アニメーションを考慮して少し遅延させる
-                setTimeout(() => {
-                    box2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                }, 300); // box2のtransition時間と同じか少し長めに設定
+                // box2を画面内にスクロールする
+                box2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                // box2自体はposition:staticになったので、show-mobileクラスは不要になります。
             }
         });
 
@@ -855,10 +853,19 @@
 
     // box2を閉じるボタンのイベントリスナー
     box2CloseButton.addEventListener('click', () => {
+        // PC版でbox2が開いていた場合は閉じる
         box2.classList.remove('show-pc');
-        box2.classList.remove('show-mobile');
-        // box2が閉じたら、ページの先頭（またはboxの位置）までスクロールを戻すことも検討
-        // window.scrollTo({ top: 0, behavior: 'smooth' });
+        // スマホ版ではbox2は常に表示されているので、閉じる動作は「boxの場所までスクロール」に相当
+        if (window.innerWidth <= 600) {
+            // bodyの先頭、またはbox要素の先頭までスクロール
+            // box要素までスクロールする場合は、mode-boxを取得してscrollIntoViewを使う
+            const modeBox = document.getElementById('mode-box');
+            if (modeBox) {
+                modeBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            } else {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
     });
 
 </script>
