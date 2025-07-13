@@ -390,6 +390,10 @@
             padding: 10px;
             gap: 20px;
             justify-content: flex-start;
+            /* box2が下に出てくる分、全体がスクロールできるように変更 */
+            height: auto; /* bodyの高さがコンテンツに合わせて伸びるように */
+            min-height: 100vh; /* 最小の高さはビューポートと同じ */
+            overflow-y: auto; /* 必要に応じて縦スクロールを許可 */
         }
 
         .box {
@@ -456,20 +460,23 @@
 
         /* box2のスマートフォン専用スタイル */
         .box2 {
+            position: relative; /* fixedからrelativeに変更 */
             top: auto; /* topの指定を解除 */
-            bottom: -100vh; /* 画面下部に隠す */
-            left: 0;
-            width: 100vw;
-            height: 80vh; /* 画面の80%の高さで表示 */
-            transform: translateX(0) translateY(0); /* transformをリセットしてbottomで制御 */
-            transition: bottom 0.3s ease; /* bottomプロパティをアニメーション */
-            border-bottom-left-radius: 0;
-            border-bottom-right-radius: 0;
-            padding-top: 50px;
+            left: auto; /* leftの指定を解除 */
+            transform: none; /* transformの指定を解除 */
+            margin-top: 20px; /* box1との間にスペース */
+            width: 100%; /* 幅を画面いっぱいに */
+            height: auto; /* 高さはコンテンツに合わせて自動調整 */
+            min-height: 80vh; /* 最小の高さ */
+            transition: transform 0.3s ease-out; /* transformでスライド */
+            transform: translateY(100%); /* 初期状態は下に完全に隠す */
+            border-bottom-left-radius: 10px; /* 角丸を維持 */
+            border-bottom-right-radius: 10px; /* 角丸を維持 */
+            box-sizing: border-box; /* paddingを含めてwidth/heightを計算 */
         }
 
         .box2.show-mobile { /* スマホ用の表示クラス */
-            bottom: 0; /* 画面下部に表示 */
+            transform: translateY(0); /* 通常表示位置にスライド */
         }
         
         /* スマートフォンでのアイコン位置調整 */
@@ -780,6 +787,11 @@
                 box2.classList.add('show-pc');
             } else { // スマートフォン画面の場合 (600px以下の場合)
                 box2.classList.add('show-mobile');
+                // スマホの場合、box2が表示されたらその位置までスクロール
+                // アニメーションを考慮して少し遅延させる
+                setTimeout(() => {
+                    box2.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }, 300); // box2のtransition時間と同じか少し長めに設定
             }
         });
 
@@ -845,6 +857,8 @@
     box2CloseButton.addEventListener('click', () => {
         box2.classList.remove('show-pc');
         box2.classList.remove('show-mobile');
+        // box2が閉じたら、ページの先頭（またはboxの位置）までスクロールを戻すことも検討
+        // window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 
 </script>
