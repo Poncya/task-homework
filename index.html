@@ -5,7 +5,7 @@
 <title>todotask</title>
 <style>
 /* ----------------------------
-   フォントと色定義
+    フォントと色定義
 ---------------------------- */
     @font-face {
         font-family: 'komadori_mini';
@@ -17,7 +17,7 @@
     }
 
 /* ----------------------------
-   全体のレイアウト（html / body） - PCデフォルト
+    全体のレイアウト（html / body） - PCデフォルト
 ---------------------------- */
     html {
         height: 100vh; /* PCではビューポートの高さに合わせる */
@@ -36,7 +36,7 @@
         font-family: 'komadori_mini', sans-serif;
         background-color: var(--background);
         overflow-x: hidden;
-        gap: 40px;
+        gap: 40px; /* boxとbox2の間に隙間 */
         box-sizing: border-box;
     }
 
@@ -52,7 +52,7 @@
     }
 
 /* ----------------------------
-   アイコン
+    アイコン
 ---------------------------- */
     img {
         width: 30px;
@@ -70,7 +70,7 @@
     }
 
 /* ----------------------------
-   メインボックス（枠） - PCデフォルト
+    メインボックス（枠） - PCデフォルト
 ---------------------------- */
     .box {
         width: 600px;
@@ -110,7 +110,7 @@
     }
 
 /* ----------------------------
-   入力エリア - PCデフォルト
+    入力エリア - PCデフォルト
 ---------------------------- */
     .input-group {
         display: flex;
@@ -152,7 +152,7 @@
     }
 
 /* ----------------------------
-   タスクリスト表示 - PCデフォルト
+    タスクリスト表示 - PCデフォルト
 ---------------------------- */
     /*タスクスクロール*/
     .scroll-container {
@@ -228,28 +228,20 @@
     }
 
 /* ----------------------------
-   詳細box (box2) - PCデフォルト
+    詳細box (box2) - PCデフォルト
 ---------------------------- */
     .box2 {
-        /* PC版ではこれまで通りの固定表示（スライドイン） */
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%) translateX(100vw); /* 画面右に隠す */
+        /* PC版ではboxの隣に配置 */
         width: 600px;
         height: 400px;
-        transition: transform 0.3s ease;
         border-radius: 10px;
         box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
         display: flex;
         flex-direction: column;
         align-items: center;
         padding-top: 20px;
-        z-index: 99;
-    }
-
-    .box2.show-pc { /* PC用の表示クラス */
-        transform: translate(-50%, -50%) translateX(0); /* 画面中央に表示 */
+        flex-shrink: 0; /* 縮小させない */
+        position: relative; /* 子要素のposition:absoluteの基準 */
     }
 
     .box2.dark-mode {
@@ -383,11 +375,11 @@
 
 
 /* ----------------------------
-   メディアクエリ (スマートフォン最適化)
+    メディアクエリ (スマートフォン最適化)
 ---------------------------- */
     @media (max-width: 600px) {
         body {
-            flex-direction: column;
+            flex-direction: column; /* スマートフォンでは縦並び */
             padding: 10px;
             gap: 20px;
             justify-content: flex-start;
@@ -549,14 +541,14 @@
         <div id="box2-sub-tasks-container"></div>
 
         <div class="input-group">
-           <input id="box2-task-input" maxlength="10" placeholder="具体的なタスクを入力...">
+            <input id="box2-task-input" maxlength="10" placeholder="具体的なタスクを入力...">
             <button id="box2-extra-button">追加</button>
         </div>
     </div>
 
 <script>
 // ===============================
-//        モード切り替え機能
+//       モード切り替え機能
 // ===============================
     let isLight = true;
 
@@ -594,7 +586,7 @@
     }
 
 // ===============================
-//        要素取得（共通）
+//       要素取得（共通）
 // ===============================
     const mainContainer = document.getElementById('main-container'); // メインのタスクリスト
     const extraButton = document.getElementById('extra-button');
@@ -622,13 +614,10 @@
         box2MainTaskDisplay.textContent = 'メインタスクをせんたくしてね';
         box2SubTasksContainer.innerHTML = '';
         selectedMainTask = null; // 初期化
-
-        // スマホ版でbox2を非表示にする初期設定 (スクロールでの表示なので不要になるが、念のため)
-        // box2.style.display = (window.innerWidth <= 600) ? 'none' : 'flex'; 
     };
 
 // ===============================
-//     タスク追加 (メイン)
+//      タスク追加 (メイン)
 // ===============================
     extraButton.addEventListener('click', () => {
         const task = taskInput.value.trim();
@@ -640,7 +629,7 @@
     });
 
 // ===============================
-//   タスク追加 (box2 サブタスク)
+//    タスク追加 (box2 サブタスク)
 // ===============================
     box2Button.addEventListener('click', () => {
         const subTask = box2Input.value.trim();
@@ -664,6 +653,7 @@
         mainContainer.querySelectorAll('.item-box').forEach(box => {
             const taskText = box.querySelector('.item-content').textContent;
             const completed = box.querySelector('.check-button').classList.contains('checked');
+            // localStorageから該当メインタスクのサブタスクをロード
             const savedSubTasks = JSON.parse(localStorage.getItem(`subTasks_${taskText}`)) || [];
             allMainTasks.push({
                 task: taskText,
@@ -681,7 +671,7 @@
 
 
 // ===============================
-//     タスク削除 (メイン/サブ)
+//      タスク削除 (メイン/サブ)
 // ===============================
     function removeTask(taskText, containerElement, isSubTask = false, parentTask = null) {
         let saved;
@@ -713,9 +703,6 @@
                 box2MainTaskDisplay.textContent = 'メインタスクをせんたくしてね';
                 box2SubTasksContainer.innerHTML = '';
                 selectedMainTask = null;
-                // PC版でbox2が開いていた場合は閉じる
-                box2.classList.remove('show-pc');
-                // スマホ版ではbox2は常に表示されているので、特に操作不要
             }
             // 関連するサブタスクのlocalStorageも削除
             localStorage.removeItem(`subTasks_${taskText}`);
@@ -723,7 +710,7 @@
     }
 
 // ===============================
-//   タスク表示ボックス作成 (メイン)
+//      タスク表示ボックス作成 (メイン)
 // ===============================
     function createTaskBox(task, completed, subTasksData) {
         const box = document.createElement('div');
@@ -783,13 +770,10 @@
                 createSubTaskBox(subTaskData.task, subTaskData.completed, box2SubTasksContainer, selectedMainTask);
             });
 
-            // box2を表示またはスクロール
-            if (window.innerWidth > 600) { // PC画面の場合 (600pxより大きい場合)
-                box2.classList.add('show-pc');
-            } else { // スマートフォン画面の場合 (600px以下の場合)
+            // スマートフォン画面の場合のみスクロール
+            if (window.innerWidth <= 600) {
                 // box2を画面内にスクロールする
                 box2.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                // box2自体はposition:staticになったので、show-mobileクラスは不要になります。
             }
         });
 
@@ -853,12 +837,8 @@
 
     // box2を閉じるボタンのイベントリスナー
     box2CloseButton.addEventListener('click', () => {
-        // PC版でbox2が開いていた場合は閉じる
-        box2.classList.remove('show-pc');
-        // スマホ版ではbox2は常に表示されているので、閉じる動作は「boxの場所までスクロール」に相当
+        // スマートフォン版でのみスクロール
         if (window.innerWidth <= 600) {
-            // bodyの先頭、またはbox要素の先頭までスクロール
-            // box要素までスクロールする場合は、mode-boxを取得してscrollIntoViewを使う
             const modeBox = document.getElementById('mode-box');
             if (modeBox) {
                 modeBox.scrollIntoView({ behavior: 'smooth', block: 'start' });
