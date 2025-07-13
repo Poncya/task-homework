@@ -504,13 +504,6 @@
             margin-top: 10px;
             height: 180px;
         }
-
-        /* スマホ版の閉じるボタン位置調整 */
-        #box2-close-button {
-            top: 15px;
-            left: 15px;
-            font-size: 28px; /* スマホでは少し大きめに */
-        }
     }
 </style>
 </head>
@@ -534,7 +527,7 @@
     </div>
 
     <div class="box2 light-mode" id="mode-box2">
-        <button id="box2-close-button">×</button> <span class="h1">やること</span>
+       <span class="h1">やること</span>
         
         <div id="box2-main-task-display">メインタスクをせんたくしてね</div>
         
@@ -597,8 +590,7 @@
     const box2Input = document.getElementById('box2-task-input');
     const box2Button = document.getElementById('box2-extra-button');
     const box2 = document.getElementById('mode-box2'); // box2要素を取得
-    const box2CloseButton = document.getElementById('box2-close-button'); // 閉じるボタン
-
+    
     let selectedMainTask = null; // 現在選択されているメインタスク
 
 // ===============================
@@ -835,8 +827,6 @@
         containerElement.appendChild(box);
     }
 
-    // box2を閉じるボタンのイベントリスナー
-    box2CloseButton.addEventListener('click', () => {
         // スマートフォン版でのみスクロール
         if (window.innerWidth <= 600) {
             const modeBox = document.getElementById('mode-box');
@@ -846,7 +836,7 @@
                 window.scrollTo({ top: 0, behavior: 'smooth' });
             }
         }
-    });
+
 
 </script>
 </body>
