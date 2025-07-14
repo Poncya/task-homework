@@ -813,6 +813,7 @@
                             }
                         }
                         const taskText = `${exercise.name} <span class='num'>${count}<span>`;
+                        content.innerHTML = taskText;
                         createTaskBox(taskText, false, [], true);
                         saveTasks();
                         item.classList.add('added');
