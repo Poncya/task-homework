@@ -443,6 +443,11 @@
             margin-top: 10px;
             height: 180px;
         }
+
+        .num {/*数字はフォントを変える*/
+            font-family: "Noto Sans JP", sans-serif;
+        }
+
     }
 </style>
 </head>
@@ -807,7 +812,7 @@
                                 return;
                             }
                         }
-                        const taskText = `${exercise.name} ${count}回`;
+                        const taskText = `${exercise.name} <span class='num'>${count}<span>`;
                         createTaskBox(taskText, false, [], true);
                         saveTasks();
                         item.classList.add('added');
