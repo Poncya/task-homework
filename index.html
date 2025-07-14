@@ -648,7 +648,7 @@
         });
         
 
-        const newTaskName = task;
+        const newTaskName = isExercise ? task.split(' ')[0] : task;
         if (existingTasks.includes(newTaskName)) {
             alert("そのタスクは既に追加されています！");
             return;
@@ -736,7 +736,7 @@
 
         const content = document.createElement('div');
         content.className = 'item-content';
-        content.textContent = subTask;
+        content.textContent = task;//ここ変更
         if (completed) {
             content.classList.add('completed');
         }
