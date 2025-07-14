@@ -644,11 +644,11 @@
 // ===============================
     function createTaskBox(task, completed, subTasksData, isExercise = false) {
         const existingTasks = Array.from(mainContainer.querySelectorAll('.item-box')).map(box => {
-            const content = box.querySelector('.item-content').textContent;
-            return box.classList.contains('exercise-task') ? content.split(' ')[0] : content;
+          return box.querySelector('.item-content').textContent;
         });
+        
 
-        const newTaskName = isExercise ? task.split(' ')[0] : task;
+        const newTaskName = task;
         if (existingTasks.includes(newTaskName)) {
             alert("そのタスクは既に追加されています！");
             return;
