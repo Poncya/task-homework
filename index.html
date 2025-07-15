@@ -365,9 +365,9 @@
         .box,
         .box2,
         .box3 {
-            width: 95%;
-            height: auto;
-            min-height: 350px;
+            width: 300px; /* 指定された幅に調整 */
+            height: 400px; /* 指定された高さに調整 */
+            min-height: auto; /* min-heightを削除 */
             box-sizing: border-box;
             position: static;
             transform: none;
@@ -381,7 +381,7 @@
         }
 
         .h1 {
-            font-size: 22px; /* スマホ用に調整 */
+            font-size: 20px; /* スマホ用に調整 */
             position: static;
             transform: none;
             margin-bottom: 15px; /* スマホ用に調整 */
@@ -392,28 +392,30 @@
             transform: none;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 12px; /* スマホ用に調整 */
-            gap: 8px; /* スマホ用に調整 */
+            margin-bottom: 12px;
+            gap: 8px;
+            width: auto; /* 親要素の幅に合わせる */
+            max-width: 90%; /* 親要素の幅に合わせて最大幅を設定 */
         }
 
         #task-input,
         #box2-task-input {
-            width: 90%;
-            height: 38px; /* スマホ用に調整 */
-            font-size: 13px; /* スマホ用に調整 */
-            margin-bottom: 8px; /* スマホ用に調整 */
+            width: 95%; /* 親要素の幅に合わせて柔軟に拡大 */
+            height: 42px; /* 40pxの10%増 */
+            font-size: 14px; /* 13pxの約10%増 */
+            margin-bottom: 8px;
         }
 
         #extra-button,
         #box2-extra-button {
-            width: 150px;
-            height: 38px; /* スマホ用に調整 */
-            font-size: 13px; /* スマホ用に調整 */
+            width: 165px; /* 150pxの10%増 */
+            height: 42px; /* 40pxの10%増 */
+            font-size: 14px; /* 13pxの約10%増 */
         }
 
         .scroll-container {
             width: 95%;
-            height: 140px; /* スマホ用に調整 */
+            height: 180px; /* boxの高さに合わせて調整 */
             margin-top: 15px;
             padding: 0 10px;
         }
@@ -422,27 +424,28 @@
         .box2 .item-box,
         #box2-main-task-display,
         .exercise-item {
-            width: 95%;
-            padding: 10px; /* スマホ用に調整 */
-            font-size: 13px; /* スマホ用に調整 */
+            width: 90%; /* boxの幅に合わせて調整 */
+            padding: 10px;
+            font-size: 13px;
         }
 
         .item-content {
-            font-size: 13px; /* スマホ用に調整 */
+            font-size: 13px;
         }
 
         .remove-button,
         .check-button {
-            font-size: 13px; /* スマホ用に調整 */
+            font-size: 13px;
         }
 
         #box2-main-task-display {
             margin-top: 0;
+            font-size: 16px; /* font-sizeを調整 */
         }
         
         #box2-sub-tasks-container {
             margin-top: 10px;
-            height: 170px; /* スマホ用に調整 */
+            height: 180px; /* boxの高さに合わせて調整 */
         }
     }
 </style>
