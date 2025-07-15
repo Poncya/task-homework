@@ -26,14 +26,14 @@
     }
 
     body {
-        width: 150vw;
+        width: 150vw; /* 元に戻す */
         height: 100vh;
         margin: 0;
         padding: 0;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-family: 'komadori_mini', "Noto Sans JP", "Yu Gothic", sans-serif;
+        font-family: 'komadori_mini', sans-serif; /* 元に戻す */
         background-color: var(--background);
         overflow-x: auto;
         gap: 20px;
@@ -188,7 +188,7 @@
     }
 
     .item-content {
-        font-family: 'komadori_mini', "Noto Sans JP", "Yu Gothic", sans-serif;
+        font-family: 'komadori_mini', sans-serif; /* 元に戻す */
         font-size: 15px;
         color: #000;
         margin: 0;
@@ -381,10 +381,10 @@
         }
 
         .h1 {
-            font-size: 24px;
+            font-size: 22px; /* スマホ用に調整 */
             position: static;
             transform: none;
-            margin-bottom: 20px;
+            margin-bottom: 15px; /* スマホ用に調整 */
         }
 
         .input-group {
@@ -392,27 +392,28 @@
             transform: none;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 15px;
+            margin-bottom: 12px; /* スマホ用に調整 */
+            gap: 8px; /* スマホ用に調整 */
         }
 
         #task-input,
         #box2-task-input {
             width: 90%;
-            height: 40px;
-            font-size: 14px;
-            margin-bottom: 10px;
+            height: 38px; /* スマホ用に調整 */
+            font-size: 13px; /* スマホ用に調整 */
+            margin-bottom: 8px; /* スマホ用に調整 */
         }
 
         #extra-button,
         #box2-extra-button {
             width: 150px;
-            height: 40px;
-            font-size: 14px;
+            height: 38px; /* スマホ用に調整 */
+            font-size: 13px; /* スマホ用に調整 */
         }
 
         .scroll-container {
             width: 95%;
-            height: 150px;
+            height: 140px; /* スマホ用に調整 */
             margin-top: 15px;
             padding: 0 10px;
         }
@@ -422,17 +423,17 @@
         #box2-main-task-display,
         .exercise-item {
             width: 95%;
-            padding: 12px;
-            font-size: 14px;
+            padding: 10px; /* スマホ用に調整 */
+            font-size: 13px; /* スマホ用に調整 */
         }
 
         .item-content {
-            font-size: 14px;
+            font-size: 13px; /* スマホ用に調整 */
         }
 
         .remove-button,
         .check-button {
-            font-size: 14px;
+            font-size: 13px; /* スマホ用に調整 */
         }
 
         #box2-main-task-display {
@@ -441,9 +442,8 @@
         
         #box2-sub-tasks-container {
             margin-top: 10px;
-            height: 180px;
+            height: 170px; /* スマホ用に調整 */
         }
-
     }
 </style>
 </head>
@@ -644,12 +644,12 @@
 // ===============================
     function createTaskBox(task, completed, subTasksData, isExercise = false) {
         const existingTasks = Array.from(mainContainer.querySelectorAll('.item-box')).map(box => {
-          return box.querySelector('.item-content').textContent;
+            return box.querySelector('.item-content').textContent;
         });
         
 
         const newTaskName = isExercise ? task.split(' ')[0] : task;
-        if (existingTasks.includes(newTaskName)) {
+        if (existingTasks.some(existingTask => existingTask.startsWith(newTaskName))) { /* 修正: startsWith を使用して部分一致も考慮 */
             alert("そのタスクは既に追加されています！");
             return;
         }
@@ -736,7 +736,7 @@
 
         const content = document.createElement('div');
         content.className = 'item-content';
-        content.textContent = subTask;//ここ変更
+        content.textContent = subTask;
         if (completed) {
             content.classList.add('completed');
         }
