@@ -360,15 +360,18 @@
             overflow-y: auto;
             align-items: center;
             padding-left: 10px;
-            width: 50%;
+            width: 100%;
+            box-sizing: border-box;
+            flex-shrink: 0
         }
 
         .box,
         .box2,
         .box3 {
-            width: 300px; /* 指定された幅に調整 */
-            height: 400px; /* 指定された高さに調整 */
-            min-height: auto; /* min-heightを削除 */
+            width: 100%; 
+            max-width: 100%;
+            height: 400px; 
+            min-height: auto; 
             box-sizing: border-box;
             position: static;
             transform: none;
@@ -382,10 +385,10 @@
         }
 
         .h1 {
-            font-size: 20px; /* スマホ用に調整 */
+            font-size: 24px; 
             position: static;
             transform: none;
-            margin-bottom: 15px; /* スマホ用に調整 */
+            margin-bottom: 15px;
         }
 
         .input-group {
@@ -401,22 +404,22 @@
 
         #task-input,
         #box2-task-input {
-            width: 95%; /* 親要素の幅に合わせて柔軟に拡大 */
-            height: 42px; /* 40pxの10%増 */
-            font-size: 14px; /* 13pxの約10%増 */
+            width: 95%; 
+            height: 42px; 
+            font-size: 16px; 
             margin-bottom: 8px;
         }
 
         #extra-button,
         #box2-extra-button {
-            width: 165px; /* 150pxの10%増 */
-            height: 42px; /* 40pxの10%増 */
-            font-size: 14px; /* 13pxの約10%増 */
+            width: 165px; 
+            height: 42px; 
+            font-size: 16px; 
         }
 
         .scroll-container {
             width: 95%;
-            height: 180px; /* boxの高さに合わせて調整 */
+            height: 180px; 
             margin-top: 15px;
             padding: 0 10px;
         }
@@ -425,7 +428,7 @@
         .box2 .item-box,
         #box2-main-task-display,
         .exercise-item {
-            width: 90%; /* boxの幅に合わせて調整 */
+            width: 90%; 
             padding: 10px;
             font-size: 13px;
         }
